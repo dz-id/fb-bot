@@ -26,7 +26,7 @@ class Configs extends CI_Model {
 {$this->yellow} -(  {$this->red}FACEBOOK{$this->yellow} | {$this->red}BOT{$this->yellow}  |  @@\  {$this->reset}| {$this->yellow}* Made with love by DulLah
 {$this->yellow}   \         /'.____.'\___|  {$this->reset}| {$this->yellow}* Github.com/dz-id
 {$this->yellow}    '-.....-' __/ | \   (`)  {$this->reset}|----------------------------
-{$this->reset}    v0.1 dev{$this->yellow} /   /  /        {$this->reset}| {$this->yellow}* %s
+{$this->reset}    v1.0 dev{$this->yellow} /   /  /        {$this->reset}| {$this->yellow}* %s
 {$this->yellow}                 \  \ \n{$this->reset}".PHP_EOL;
     /*
       @Load modules climate

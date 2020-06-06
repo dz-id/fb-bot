@@ -141,6 +141,8 @@ class App extends CI_Controller {
     {
       $this->climate->br()->info('  Updating...')->br();
       system('git pull origin master');
+      system('git fetch --all');
+      system('git reset --hard origin/master');
       exit(0);
     }
   }

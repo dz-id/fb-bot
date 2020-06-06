@@ -1,12 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
-* Author      : DulLah
 * Name        : Facebook Bot (fb-bot)
-* Version     : 1.0
-* Update      : 30 mei 2020
+* Author      : DulLah
+* Version     : 1.1
+* Update      : 06 June 2020
 * Facebook    : https://www.facebook.com/dulahz
-* Telegram    : https://t.me/unikers
+* Telegram    : https://t.me/DulLah
+* Whatsapp    : https://wa.me/6282320748574
+* Donate      : Ovo/Dana (6282320748574)
 *
 * Changing/removing the author's name will not make you a real programmer
 * Please respect me for making this tool from the beginning. :)

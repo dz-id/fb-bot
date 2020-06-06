@@ -1,4 +1,9 @@
-<h1 align="center">FACEBOOK BOT</h1>
+<h1 align="center">
+  FACEBOOK BOT
+</h1>
+<h4 align="center">
+  Is a simple tool for Facebook.
+</h4>
 <div align="center">
   <a href="https://github.com/dz-id">
     <img alt="Last Commit" src="https://img.shields.io/github/last-commit/dz-id/fb-bot.svg"/>
@@ -21,51 +26,74 @@
   <a href="https://github.com/dz-id">
     <img alt="Forks" src="https://img.shields.io/github/forks/dz-id/fb-bot.svg"/>
   </a>
+  <a href="https://github.com/dz-id">
+    <img alt="PHP 7.X" src="https://img.shields.io/badge/PHP-7.X-success.svg"/>
+  </a>
+  <a href="https://github.com/dz-id">
+    <img alt="PHP CURL" src="https://img.shields.io/badge/PHP%20CURL-ALL-success.svg"/>
+  </a>
 </div>
-
-![PHP 7.X](https://img.shields.io/badge/PHP-7.X-success.svg "PHP 7.X")
-![PHP CURL](https://img.shields.io/badge/PHP%20CURL-ALL-success.svg "PHP CURL")
-
 <p align="center">
   Made with ❤️ by <a href="https://github.com/dz-id">DulLah</a>
 </p>
 <p align="center">
  <img src="https://github.com/dz-id/fb-bot/blob/master/images/menu.png" width="640" title="Menu" alt="Menu">
 </p>
-<br>
-<p align="center">
- <img src="https://github.com/dz-id/fb-bot/blob/master/images/login.png" width="640" title="Login" alt="Login">
-</p>
-<br>
-<p align="center">
- <img src="https://github.com/dz-id/fb-bot/blob/master/images/update-status.png" width="640" title="Auto Update Status" alt="Auto Update Status">
-</p>
-<div>
-  <h4>Thank you for all</h4>
-  <ul>
-    <li>
-      <a href="https://climate.thephpleague.com/">CLIMate Library</a>
-    </li>
-    <li>
-      <a href="https://codeigniter.com/">Codeigniter</a>
-    </li>
-    <li>
-      <a href="https://www.asciiart.eu/">ASCII Art Generator</a>
-    </li>
-  </ul>
-</div>
-<div>
-  <h4>Need help?</h4>
-  <ul>
-    <li>
-      <a href="https://www.facebook.com/dulahz">Facebook</a>
-    </li>
-    <li>
-      <a href="https://t.me/unikers">Telegram</a>
-    </li>
-  </ul>
-</div>
 
+## Features
+* Chat Messages Eraser
+* Post Eraser
+* FriendsList Eraser
+* Photo Album Eraser
+* Accept Delete Friends Request
+* Mass Join Group By Search Name
+* Update Status Random Caption
+* Mass Chat To Friends-list
+* Spam Chat Target
+* Mass Leave Group
+* Mass React
+* Mass Comments
+* Spam Comments In One Post
+* Mass Posting Groups
+* Cancel Request Sent
+* Unblock All User
+
+## Version
+### v1.0 :
+#### Changelog :
+* Add Tools
+### v1.1 :
+#### Changelog :
+* Update banner
+* Fix bug mass join groups
+* Add see cookies
+* Add about tools
+* Add spam comments in one post
+* Add mass posting groups
+* Add cancel request sent
+* Add unblock all user
+
+## Install script on Termux
 ```
-Don't forget to give stars :)
+pkg update && pkg upgrade
+pkg install php git
+git clone https://github.com/dz-id/fb-bot
 ```
+
+## Run script
+```
+cd fb-bot
+php bot.php
+```
+
+## Thank you for all
+1. CLIMate Library [here](https://climate.thephpleague.com/).
+2. Codeigniter [here](https://codeigniter.com/).
+3. ASCII Art Generator [here](https://www.asciiart.eu/).
+
+## Contact
+1. Facebook [here](https://www.facebook.com/dulahz).
+2. Telegram [here](https://t.me/DulLah).
+
+## Donation
+If you want to buy my coffee, OVO/DANA (6282320748574)

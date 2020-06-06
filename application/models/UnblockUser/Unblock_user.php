@@ -14,7 +14,7 @@
 * Please respect me for making this tool from the beginning. :)
 */
 
-class Chat_messages_eraser extends CI_Model {
+class Unblock_user extends CI_Model {
 
   public function __construct()
   {
@@ -23,17 +23,11 @@ class Chat_messages_eraser extends CI_Model {
 
   public function reset_data()
   {
-    $this->url = $this->base_url.'/messages';
     /*
       @Array data
     */
     $this->data = [];
-    /*
-      @Array params
-    */
-    $this->params = [];
-
-    $this->username = '';
+    $this->url = $this->base_url.'/privacy/touch/block/';
   }
 
   public function index()
@@ -44,51 +38,49 @@ class Chat_messages_eraser extends CI_Model {
     foreach ($dom->getElementsByTagName('a') as $href)
     {
       $hrefs = $href->getAttribute('href');
-      if (strpos($hrefs, '/messages/read') !== false)
+      if (strpos($hrefs, '/privacy/touch/unblock/confirm/?unblock_id=') !== false)
       {
         $this->data[] = $this->base_url.$hrefs;
-        $this->climate->inline("\r  Collecting (".count($this->data).") chat messages...");
+        $this->climate->inline("\r  GET (".count($this->data).") data...");
       }
     }
     foreach ($dom->getElementsByTagName('a') as $href)
     {
-      $hrefs = $href->getAttribute('href');
-      if (strpos($href->nodeValue, 'Lihat Pesan Sebelumnya') !== false)
+      if (strpos($href->nodeValue, 'Lihat selengkapnya') !== false)
       {
+        $hrefs = $href->getAttribute('href');
         $this->url = $this->base_url.$hrefs;
         $this->index();
         break;
       }
     }
-    if (count($this->data) !== 0)
+    if (count($this->data) == 0)
     {
-      $this->climate->br()->br()->shout('  Starting delete '.count($this->data).' messages...')->br();
-      $this->delete_messages();
+      $this->climate->shout('  No data');
+      $this->configs->back_menu();
     }
     else
     {
-      $this->climate->shout('  No messages found!');
-      $this->configs->back_menu();
+      $this->climate->br()->br()->shout('  Starting...')->br();
+      $this->unblock();
     }
   }
 
-  public function delete_messages()
+  private function unblock()
   {
-    foreach ($this->data as $chat)
+    foreach ($this->data as $user)
     {
-      $response = $this->configs->request_get($chat, $this->cookies);
+      preg_match('/\/privacy\/touch\/unblock\/confirm\/\?unblock_id=(.*?)$/', $user, $user_id);
+      $response = $this->configs->request_get($user, $this->cookies);
       $dom = new DOMDocument();
       @$dom->loadHTML($response);
       $this->params = [];
-      $name = $dom->getElementsByTagName('title');
-      $this->username = $name->item(0)->nodeValue;
       foreach ($dom->getElementsByTagName('form') as $form)
       {
         $action = $form->getAttribute('action');
-        if (strpos($action, '/messages/action_redirect') !== false)
+        if (strpos($action, '/privacy/touch/unblock/write/?') !== false)
         {
           $this->params['action'] = $this->base_url.$action;
-          break;
         }
       }
       foreach ($dom->getElementsByTagName('input') as $input)
@@ -107,28 +99,24 @@ class Chat_messages_eraser extends CI_Model {
       }
       if (count($this->params) == 3)
       {
-        $this->execute();
+        $this->params['confirmed'] = 'Buka Blokir';
+        $post_data = http_build_query($this->params);
+        $response = $this->configs->request_post($this->params['action'], $this->cookies, $post_data);
+        if (strpos($response, 'Anda telah menghapus blokir') !== false)
+        {
+          $this->climate->out("  * Sucessfully unbloked ({$user_id[1]})");
+        }
+        else
+        {
+          $this->climate->out("  * Failed ({$user_id[1]})");
+        }
+      }
+      else
+      {
+        $this->climate->out("  * Failed error when grab values ({$user_id[1]})");
       }
     }
     $this->climate->br()->out('  Finished, thank you for using this tool');
     $this->configs->back_menu();
-  }
-
-  public function execute()
-  {
-    $this->params['delete'] = 'Hapus';
-    $post = http_build_query($this->params);
-    $response = $this->configs->request_post($this->params['action'], $this->cookies, $post);
-    $dom = new DOMDocument();
-    @$dom->loadHTML($response);
-    foreach ($dom->getElementsByTagName('a') as $href)
-    {
-      $hrefs = $href->getAttribute('href');
-      if (strpos($hrefs, '/messages/action/?mm_action=delete') !== false)
-      {
-        $this->configs->request_get($this->base_url.$hrefs, $this->cookies);
-        $this->climate->out('  [DELETED] '.$this->username);
-      }
-    }
   }
 }

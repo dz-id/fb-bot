@@ -14,7 +14,7 @@
 * Please respect me for making this tool from the beginning. :)
 */
 
-class Mass_leave_group extends CI_Model {
+class mass_posting_groups extends CI_Model {
 
   public function __construct()
   {
@@ -75,10 +75,23 @@ class Mass_leave_group extends CI_Model {
       $index = str_pad($no, 2, '0', STR_PAD_LEFT);
       $this->climate->out("    [{$this->yellow}{$index}{$this->reset}]. {$group['name']}");
     }
-    $this->climate->br()->shout("  Select the group you want to leave (EX: 1,2,3) , Type 'all' for leave all groups");
+    $this->climate->br()->shout("  Select the group you want to posting (EX: 1,2,3) , Type 'all' for posting in all groups");
     $this->climate->br()->shout("  Type 'BC' for back to menu")->br();
     $input = $this->climate->input("  Select:");
     $input = $input->prompt();
+    if (strtolower($input) == 'bc')
+    {
+      $this->return_menu->index();
+    }
+    $this->climate->br()->info("  Use '<n>' for new lines (ex: hello<n>word)")->br();
+    $caption = $this->climate->input('  Captions:');
+    $this->caption = str_replace("<n>", "\n", $caption->prompt());
+    if (!trim($this->caption))
+    {
+      $this->climate->br()->shout('  Please enter a valid caption');
+      sleep(3);
+      $this->tools->mass_posting_groups('Mass Posting Groups');
+    }
     $this->climate->br();
     $indexs = explode(',', trim($input));
     if (strtolower($input) == 'all')
@@ -87,12 +100,8 @@ class Mass_leave_group extends CI_Model {
       {
         $this->id = $group['id'];
         $this->name = $group['name'];
-        $this->leave_group();
+        $this->posting_group();
       }
-    }
-    else if (strtolower($input) == 'bc')
-    {
-      $this->return_menu->index();
     }
     else
     {
@@ -102,7 +111,7 @@ class Mass_leave_group extends CI_Model {
         {
           $this->id = $this->data[$i-1]['id'];
           $this->name = $this->data[$i-1]['name'];
-          $this->leave_group();
+          $this->posting_group();
         }
         else
         {
@@ -115,46 +124,53 @@ class Mass_leave_group extends CI_Model {
     exit(0);
   }
 
-  private function leave_group()
+  private function posting_group()
   {
     $this->climate->out('  Opening groups: '.$this->name);
-    $response = $this->configs->request_get($this->base_url.'/group/leave/?group_id='.$this->id.'&refid=18', $this->cookies);
+    $response = $this->configs->request_get($this->base_url.'/groups/'.$this->id, $this->cookies);
     $dom = new DOMDocument();
     @$dom->loadHTML($response);
     $this->params = [];
-    foreach ($dom->getElementsByTagName('input') as $input)
-    {
-      $name = $input->getAttribute('name');
-      $value = $input->getAttribute('value');
-      if (trim($name) == 'fb_dtsg')
-      {
+    foreach ($dom->getElementsByTagName('form') as $form) {
+      $action = $form->getAttribute('action');
+      if (strpos($action, '/composer/mbasic/?') !== false) {
+        $this->params['action'] = $this->base_url.$action;
+      }
+    }
+    foreach ($dom->getElementsByTagName('input') as $form) {
+      $name = $form->getAttribute('name');
+      $value = $form->getAttribute('value');
+      if (trim($name) == 'fb_dtsg') {
         $this->params['fb_dtsg'] = $value;
       }
-      if (trim($name) == 'jazoest')
-      {
+      if (trim($name) == 'jazoest') {
         $this->params['jazoest'] = $value;
       }
-      if (trim($name) == 'group_id')
-      {
-        $this->params['group_id'] = $value;
+      if (trim($name) == 'target') {
+        $this->params['target'] = $value;
         break;
       }
     }
-    if (count($this->params) == 3)
+    if (count($this->params) == 4)
     {
-      $this->execute();
+      $this->posting_exec();
     }
     else
     {
-      $this->climate->out("   + Error when grab value");
+      $this->climate->out('    * Failed, error when GET value');
     }
   }
 
-  public function execute()
+  private function posting_exec()
   {
-    $this->params['confirm'] = 'Keluar dari Grup';
-    $post_data = http_build_query($this->params);
-    $response = $this->configs->request_post($this->base_url.'/a/group/leave/?qp=0', $this->cookies, $post_data);
-    $this->climate->out("   - Success leaved");
+    $this->params['c_src'] = 'group';
+    $this->params['cwevent'] = 'composer_entry';
+    $this->params['referrer'] = 'group';
+    $this->params['cver'] = 'amber';
+    $this->params['xc_message'] = $this->caption;
+    $this->params['view_post'] = 'Posting';
+    $post = http_build_query($this->params);
+    $this->configs->request_post($this->params['action'], $this->cookies, $post);
+    $this->climate->out('    * Successfully posted');
   }
 }

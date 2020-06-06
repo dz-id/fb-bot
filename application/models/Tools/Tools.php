@@ -1,12 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
-* Author      : DulLah
 * Name        : Facebook Bot (fb-bot)
-* Version     : 1.0
-* Update      : 30 mei 2020
+* Author      : DulLah
+* Version     : 1.1
+* Update      : 06 June 2020
 * Facebook    : https://www.facebook.com/dulahz
-* Telegram    : https://t.me/unikers
+* Telegram    : https://t.me/DulLah
+* Whatsapp    : https://wa.me/6282320748574
+* Donate      : Ovo/Dana (6282320748574)
 *
 * Changing/removing the author's name will not make you a real programmer
 * Please respect me for making this tool from the beginning. :)
@@ -133,5 +135,37 @@ class Tools extends CI_Model {
     $this->load->model('MassComments/mass_comments');
     $this->mass_comments->reset_data();
     $this->mass_comments->index();
+  }
+
+  public function spam_comments($title)
+  {
+    $this->show_banner($title);
+    $this->load->model('SpamComments/spam_comments');
+    $this->spam_comments->index();
+  }
+
+  public function mass_posting_groups($title)
+  {
+    $this->show_banner($title);
+    $this->load->model('MassPostingGroups/mass_posting_groups');
+    $this->mass_posting_groups->reset_data();
+    $this->mass_posting_groups->get_group();
+    $this->mass_posting_groups->index();
+  }
+
+  public function cancel_request_sent($title)
+  {
+    $this->show_banner($title);
+    $this->load->model('CancelRequestSent/cancel_request_sent');
+    $this->cancel_request_sent->reset_data();
+    $this->cancel_request_sent->index();
+  }
+
+  public function unblock_user($title)
+  {
+    $this->show_banner($title);
+    $this->load->model('UnblockUser/unblock_user');
+    $this->unblock_user->reset_data();
+    $this->unblock_user->index();
   }
 }

@@ -1,12 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
-* Author      : DulLah
 * Name        : Facebook Bot (fb-bot)
-* Version     : 1.0
-* Update      : 30 mei 2020
+* Author      : DulLah
+* Version     : 1.1
+* Update      : 06 June 2020
 * Facebook    : https://www.facebook.com/dulahz
-* Telegram    : https://t.me/unikers
+* Telegram    : https://t.me/DulLah
+* Whatsapp    : https://wa.me/6282320748574
+* Donate      : Ovo/Dana (6282320748574)
 *
 * Changing/removing the author's name will not make you a real programmer
 * Please respect me for making this tool from the beginning. :)
@@ -22,11 +24,11 @@ class Configs extends CI_Model {
     $this->banner = PHP_EOL."
 {$this->yellow}                         \ \ {$this->reset}| {$this->yellow}* %s
 {$this->yellow}    .-'''''-.    __       |/ {$this->reset}|----------------------------
-{$this->yellow}   /         \.'`  `',.--//  {$this->reset}| {$this->yellow}* Bot for Facebook
-{$this->yellow} -(  {$this->red}FACEBOOK{$this->yellow} | {$this->red}BOT{$this->yellow}  |  @@\  {$this->reset}| {$this->yellow}* Made with love by DulLah
-{$this->yellow}   \         /'.____.'\___|  {$this->reset}| {$this->yellow}* Github.com/dz-id
+{$this->yellow}   /         \.'`  `',.--//  {$this->reset}| {$this->yellow}* BOT FOR FACEBOOK [{$this->red}CLI{$this->yellow}]
+{$this->yellow} -(  {$this->red}FACEBOOK{$this->yellow} | {$this->red}BOT{$this->yellow}  |  @@\  {$this->reset}| {$this->yellow}* AUTHOR : DulLah
+{$this->yellow}   \         /'.____.'\___|  {$this->reset}| {$this->yellow}* GIT    : github.com/dz-id
 {$this->yellow}    '-.....-' __/ | \   (`)  {$this->reset}|----------------------------
-{$this->reset}    v1.0 dev{$this->yellow} /   /  /        {$this->reset}| {$this->yellow}* %s
+{$this->reset}    v1.1 dev{$this->yellow} /   /  /        {$this->reset}| {$this->yellow}* %s
 {$this->yellow}                 \  \ \n{$this->reset}".PHP_EOL;
     /*
       @Load modules climate
@@ -139,6 +141,10 @@ class Configs extends CI_Model {
         ['no' => '10', 'name' => 'Mass Leave Group'],
         ['no' => '11', 'name' => 'Mass React'],
         ['no' => '12', 'name' => 'Mass Comments'],
+        ['no' => '13', 'name' => 'Spam Comments In One Post'],
+        ['no' => '14', 'name' => 'Mass Posting Groups'],
+        ['no' => '15', 'name' => 'Cancel Request Sent'],
+        ['no' => '16', 'name' => 'Unblock All User'],
       )
     );
     return json_decode($menu);

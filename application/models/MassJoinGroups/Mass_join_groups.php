@@ -1,12 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
-* Author      : DulLah
 * Name        : Facebook Bot (fb-bot)
-* Version     : 1.0
-* Update      : 30 mei 2020
+* Author      : DulLah
+* Version     : 1.1
+* Update      : 06 June 2020
 * Facebook    : https://www.facebook.com/dulahz
-* Telegram    : https://t.me/unikers
+* Telegram    : https://t.me/DulLah
+* Whatsapp    : https://wa.me/6282320748574
+* Donate      : Ovo/Dana (6282320748574)
 *
 * Changing/removing the author's name will not make you a real programmer
 * Please respect me for making this tool from the beginning. :)
@@ -25,6 +27,10 @@ class Mass_join_groups extends CI_Model {
       @Array data
     */
     $this->data = [];
+    /*
+      @Array fix double groups
+    */
+    $this->fix = [];
   }
 
   public function query_input()
@@ -46,16 +52,22 @@ class Mass_join_groups extends CI_Model {
     @$dom->loadHTML($response);
     foreach ($dom->getElementsByTagName('a') as $href)
     {
-      $hrefs = $href->getAttribute('href');
-      $name = false;
       foreach ($href->getElementsByTagName('div') as $div ) {
         $name = $div->nodeValue;
         break;
       }
-      if (preg_match('/\/groups\/(.*?)\?refid=/', $hrefs) and $name) {
-        preg_match('/\/groups\/(.*?)\?refid=/', $hrefs, $ids);
-        array_push($this->data, ['id' => $ids[1], 'name' => $name]);
-        $this->climate->out("  - $name");
+      $hrefs = $href->getAttribute('href');
+      if (strpos($hrefs, '/a/group/join/?button_id=') !== false)
+      {
+        $link = $this->base_url.$hrefs;
+        $this->fix[] = $link;
+        if (count($this->fix) == 2)
+        {
+          $this->climate->out("  - $name");
+          preg_match('/group_id=(.*?)&/', $this->fix[0], $id);
+          $this->data[] = ['id' => $id[1], 'name' => $name, 'link' => $this->fix[0]];
+          $this->fix = [];
+        }
         if ($this->limit == count($this->data) OR count($this->data) > $this->limit)
         {
           $stop = true;
@@ -94,7 +106,7 @@ class Mass_join_groups extends CI_Model {
     $this->climate->br()->shout('  Starting...')->br();
     foreach ($this->data as $groups)
     {
-      $response = $this->execute($groups['id']);
+      $response = $this->configs->request_get($groups['link'], $this->cookies);
       if ($response)
       {
         $this->climate->out('  + '.$groups['name'].' -> '.$groups['id'].' -> Requests sent..');
@@ -103,41 +115,6 @@ class Mass_join_groups extends CI_Model {
       {
         $this->climate->out('  - '.$groups['name'].' -> '.$groups['id'].' -> Faileds..');
       }
-    }
-  }
-
-  private function execute($id)
-  {
-    $response = $this->configs->request_get($this->base_url.'/groups/'.$id, $this->cookies);
-    $dom = new DOMDocument();
-    @$dom->loadHTML($response);
-    $params = [];
-    foreach ($dom->getElementsByTagName('form') as $form) {
-      $action = $form->getAttribute('action');
-      if (strpos($action, '/a/group/join/?group_id=') !== false) {
-        $params['action'] = $action;
-      }
-    }
-    foreach ($dom->getElementsByTagName('input') as $form) {
-      $name = $form->getAttribute('name');
-      $value = $form->getAttribute('value');
-      if (trim($name) == 'fb_dtsg') {
-        $params['fb_dtsg'] = $value;
-      }
-      if (trim($name) == 'jazoest') {
-        $params['jazoest'] = $value;
-        break;
-      }
-    }
-    if (count($params) !== 3)
-    {
-      return false;
-    }
-    else
-    {
-      $post = http_build_query($params);
-      $this->configs->request_post($this->base_url.$params['action'], $this->cookies, $post);
-      return true;
     }
   }
 }

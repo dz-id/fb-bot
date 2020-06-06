@@ -1,12 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
-* Author      : DulLah
 * Name        : Facebook Bot (fb-bot)
-* Version     : 1.0
-* Update      : 30 mei 2020
+* Author      : DulLah
+* Version     : 1.1
+* Update      : 06 June 2020
 * Facebook    : https://www.facebook.com/dulahz
-* Telegram    : https://t.me/unikers
+* Telegram    : https://t.me/DulLah
+* Whatsapp    : https://wa.me/6282320748574
+* Donate      : Ovo/Dana (6282320748574)
 *
 * Changing/removing the author's name will not make you a real programmer
 * Please respect me for making this tool from the beginning. :)
@@ -59,9 +61,19 @@ class Report_bug extends CI_Model {
         'messages' => $this->msg
       ]
     );
-    $response = $this->configs->request_post('https://dz-tools.my.id/api/bug-report-cli', false, $post_data);
+    $ch = curl_init('https://dz-tools.my.id/api/bug-report-cli');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+    curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+      $this->climate->br()->shout('  Connection error, please check your connection and try again.');
+      exit(0);
+    }
+    curl_close($ch);
     $decode = json_decode($response);
-    if ($decode->error == false)
+    if (isset($decode->error) and $decode->error == false)
     {
       $this->climate->br()->info('  Thank you for your report, your message was sent successfully');
     }

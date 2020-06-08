@@ -76,7 +76,7 @@
 ## Install script on Termux
 ```
 pkg update && pkg upgrade
-pkg install php git
+pkg install php git libicu libgnutls
 git clone https://github.com/dz-id/fb-bot
 ```
 
